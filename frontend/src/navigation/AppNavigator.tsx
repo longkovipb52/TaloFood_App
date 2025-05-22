@@ -18,12 +18,18 @@ import ReviewScreen from '../screens/ReviewScreen';
 import ContactScreen from '../screens/ContactScreen';
 import BlogScreen from '../screens/BlogScreen';
 import BlogDetailScreen from '../screens/BlogDetailScreen';
+import AboutScreen from '../screens/AboutScreen';
 
 // Màn hình admin
 import AdminHomeScreen from '../screens/admin/AdminHomeScreen';
 import AdminUsers from '../screens/admin/AdminUsers';
 import AdminOrders from '../screens/admin/AdminOrders';
 import AdminFoods from '../screens/admin/AdminFoods';
+import AdminCategories from '../screens/admin/AdminCategories';
+import AdminContacts from '../screens/admin/AdminContacts';
+import AdminBlogs from '../screens/admin/AdminBlogs';
+import AdminReviews from '../screens/admin/AdminReviews';
+import AdminReports from '../screens/admin/AdminReports';
 
 const Stack = createStackNavigator();
 
@@ -107,6 +113,11 @@ const AppNavigator = () => {
             <Stack.Screen name="AdminUsers" component={AdminUsers} options={{ headerShown: false }} />
             <Stack.Screen name="AdminOrders" component={AdminOrders} options={{ headerShown: false }} />
             <Stack.Screen name="AdminFoods" component={AdminFoods} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminCategories" component={AdminCategories} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminContacts" component={AdminContacts} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminBlogs" component={AdminBlogs} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminReviews" component={AdminReviews} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminReports" component={AdminReports} options={{ headerShown: false }} />
           </>
         ) : (
           // Màn hình cho người dùng thường
@@ -121,6 +132,7 @@ const AppNavigator = () => {
             <Stack.Screen name="Contact" component={ContactScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Blog" component={BlogScreen} options={{ headerShown: false }} />
             <Stack.Screen name="BlogDetail" component={BlogDetailScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="About" component={AboutScreen} options={{ headerShown: false }} />
           </>
         )}
       </Stack.Navigator>

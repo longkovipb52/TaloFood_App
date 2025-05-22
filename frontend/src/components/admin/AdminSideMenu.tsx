@@ -13,7 +13,12 @@ const menuData = [
   { id: 'dashboard', title: 'Dashboard', icon: 'dashboard', screen: 'AdminHome' },
   { id: 'users', title: 'Quản lý người dùng', icon: 'users', screen: 'AdminUsers' },
   { id: 'orders', title: 'Quản lý đơn hàng', icon: 'shopping-cart', screen: 'AdminOrders' },
-  { id: 'foods', title: 'Quản lý món ăn', icon: 'cutlery', screen: 'AdminFoods' }
+  { id: 'foods', title: 'Quản lý món ăn', icon: 'cutlery', screen: 'AdminFoods' },
+  { id: 'categories', title: 'Quản lý danh mục', icon: 'list-alt', screen: 'AdminCategories' },
+  { id: 'contacts', title: 'Quản lý liên hệ', icon: 'envelope', screen: 'AdminContacts' },
+  { id: 'blogs', title: 'Quản lý bài viết', icon: 'book', screen: 'AdminBlogs' },
+  { id: 'reviews', title: 'Quản lý đánh giá', icon: 'star', screen: 'AdminReviews' },
+  { id: 'reports', title: 'Thống kê & Báo cáo', icon: 'bar-chart', screen: 'AdminReports' }
 ];
 
 const AdminSideMenu = ({ navigation, onClose, username = '' }: any) => {

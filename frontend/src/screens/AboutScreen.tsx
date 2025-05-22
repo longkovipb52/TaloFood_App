@@ -8,7 +8,7 @@ const { width } = Dimensions.get('window');
 
 const AboutScreen = ({ navigation }: any) => {
   return (
-    
+    <MainLayout navigation={navigation}>
       <ScrollView contentContainerStyle={{ padding: 18 }}>
         <View style={styles.headerBox}>
           <Image source={require('../assets/logo.png')} style={styles.logo} />
@@ -63,7 +63,7 @@ const AboutScreen = ({ navigation }: any) => {
           </Text>
         </View>
       </ScrollView>
-    
+    </MainLayout>
   );
 };
 

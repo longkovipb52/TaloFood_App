@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useCart } from '../hooks/useCart';
 import FoodDetailModal from '../components/FoodDetailModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MainLayout from '../components/MainLayout';
 
 const { width } = Dimensions.get('window');
 const API_URL = 'http://192.168.1.13:5000/api/menu';
@@ -78,117 +79,119 @@ const MenuScreen = ({ navigation, route }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#171717' }}>
-      <ScrollView 
-        stickyHeaderIndices={[0]} 
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        <View style={styles.headerContainer}>
-          {/* Tạo container cho thanh tìm kiếm và nút sắp xếp */}
-          <View style={styles.searchSortRow}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Tìm món ăn..."
-              placeholderTextColor="#888"
-              value={search}
-              onChangeText={setSearch}
-            />
-            <TouchableOpacity style={styles.sortBtn} onPress={() => setShowSort(!showSort)}>
-              <Icon name={SORT_OPTIONS.find(o => o.value === sort)?.icon || 'diamond'} size={18} color="#fbc02d" />
-              <Text style={styles.sortText} numberOfLines={1} ellipsizeMode="tail">{SORT_OPTIONS.find(o => o.value === sort)?.label}</Text>
-              <Icon name={showSort ? 'angle-up' : 'angle-down'} size={16} color="#fff" />
-            </TouchableOpacity>
+    <MainLayout navigation={navigation}>
+      <View style={{ flex: 1, backgroundColor: '#171717' }}>
+        <ScrollView 
+          stickyHeaderIndices={[0]} 
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={styles.headerContainer}>
+            {/* Tạo container cho thanh tìm kiếm và nút sắp xếp */}
+            <View style={styles.searchSortRow}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Tìm món ăn..."
+                placeholderTextColor="#888"
+                value={search}
+                onChangeText={setSearch}
+              />
+              <TouchableOpacity style={styles.sortBtn} onPress={() => setShowSort(!showSort)}>
+                <Icon name={SORT_OPTIONS.find(o => o.value === sort)?.icon || 'diamond'} size={18} color="#fbc02d" />
+                <Text style={styles.sortText} numberOfLines={1} ellipsizeMode="tail">{SORT_OPTIONS.find(o => o.value === sort)?.label}</Text>
+                <Icon name={showSort ? 'angle-up' : 'angle-down'} size={16} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            
+            {!isCategoryFromMenu && (
+              <View style={styles.categoryRow}>
+                {categories.map(cat => (
+                  <TouchableOpacity
+                    key={cat}
+                    style={[styles.categoryBtn, selectedCategory === cat && styles.categoryBtnActive]}
+                    onPress={() => setSelectedCategory(cat)}
+                  >
+                    <Text style={[styles.categoryText, selectedCategory === cat && styles.categoryTextActive]}>{cat}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
           
-          {!isCategoryFromMenu && (
-            <View style={styles.categoryRow}>
-              {categories.map(cat => (
-                <TouchableOpacity
-                  key={cat}
-                  style={[styles.categoryBtn, selectedCategory === cat && styles.categoryBtnActive]}
-                  onPress={() => setSelectedCategory(cat)}
-                >
-                  <Text style={[styles.categoryText, selectedCategory === cat && styles.categoryTextActive]}>{cat}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {filteredFoods.map(item => (
+              <TouchableOpacity 
+                key={item.food_id.toString()}
+                style={styles.foodCard}
+                onPress={() => handleFoodPress(item)}
+              >
+                <View style={styles.foodImageWrapper}>
+                  <Image source={{ uri: item.image_url }} style={styles.foodImage} />
+                </View>
+                <View style={styles.foodInfoBox}>
+                  <View style={styles.foodTypeBadge}>
+                    <Text style={styles.foodTypeText}>{item.category}</Text>
+                  </View>
+                  <View style={styles.nameContainer}>
+                    <Text style={styles.foodName} numberOfLines={2} ellipsizeMode="tail">
+                      {item.food_name}
+                    </Text>
+                  </View>
+                  <View style={styles.ratingRow}>
+                    {[1,2,3,4,5].map(i => (
+                      <Icon key={i} name={i <= Math.round(item.average_rating || 0) ? 'star' : 'star-o'} size={16} color="#fbc02d" />
+                    ))}
+                  </View>
+                  <View style={styles.priceRow}>
+                    <Text style={styles.foodPrice}>{item.new_price.toLocaleString()}đ</Text>
+                    {item.price > item.new_price && (
+                      <>
+                        <Text style={styles.oldPrice}>{item.price.toLocaleString()}đ</Text>
+                        <Text style={styles.discountBadge}>
+                          {Math.round((item.price - item.new_price) / item.price * 100)}%
+                        </Text>
+                      </>
+                    )}
+                  </View>
+                </View>
+                <Animated.View style={{ transform: [{ scale }] }}>
+                  <TouchableOpacity
+                    style={styles.addCartBtn}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      Animated.sequence([
+                        Animated.timing(scale, { toValue: 0.95, duration: 100, useNativeDriver: true }),
+                        Animated.timing(scale, { toValue: 1, duration: 100, useNativeDriver: true })
+                      ]).start();
+                      handleAddToCart(item);
+                    }}
+                  >
+                    <Icon name="shopping-cart" size={18} color="#23232a" />
+                    <Text style={styles.addCartText}>Thêm vào giỏ</Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
         
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {filteredFoods.map(item => (
-            <TouchableOpacity 
-              key={item.food_id.toString()}
-              style={styles.foodCard}
-              onPress={() => handleFoodPress(item)}
-            >
-              <View style={styles.foodImageWrapper}>
-                <Image source={{ uri: item.image_url }} style={styles.foodImage} />
-              </View>
-              <View style={styles.foodInfoBox}>
-                <View style={styles.foodTypeBadge}>
-                  <Text style={styles.foodTypeText}>{item.category}</Text>
-                </View>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.foodName} numberOfLines={2} ellipsizeMode="tail">
-                    {item.food_name}
-                  </Text>
-                </View>
-                <View style={styles.ratingRow}>
-                  {[1,2,3,4,5].map(i => (
-                    <Icon key={i} name={i <= Math.round(item.average_rating || 0) ? 'star' : 'star-o'} size={16} color="#fbc02d" />
-                  ))}
-                </View>
-                <View style={styles.priceRow}>
-                  <Text style={styles.foodPrice}>{item.new_price.toLocaleString()}đ</Text>
-                  {item.price > item.new_price && (
-                    <>
-                      <Text style={styles.oldPrice}>{item.price.toLocaleString()}đ</Text>
-                      <Text style={styles.discountBadge}>
-                        {Math.round((item.price - item.new_price) / item.price * 100)}%
-                      </Text>
-                    </>
-                  )}
-                </View>
-              </View>
-              <Animated.View style={{ transform: [{ scale }] }}>
-                <TouchableOpacity
-                  style={styles.addCartBtn}
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    Animated.sequence([
-                      Animated.timing(scale, { toValue: 0.95, duration: 100, useNativeDriver: true }),
-                      Animated.timing(scale, { toValue: 1, duration: 100, useNativeDriver: true })
-                    ]).start();
-                    handleAddToCart(item);
-                  }}
-                >
-                  <Icon name="shopping-cart" size={18} color="#23232a" />
-                  <Text style={styles.addCartText}>Thêm vào giỏ</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-      
-      {showSort && (
-        <View style={styles.sortDropdown}>
-          {SORT_OPTIONS.map(opt => (
-            <TouchableOpacity key={opt.value} style={styles.sortOption} onPress={() => { setSort(opt.value); setShowSort(false); }}>
-              <Icon name={opt.icon} size={16} color="#fbc02d" style={{ marginRight: 8 }} />
-              <Text style={{ color: '#fff' }}>{opt.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-      
-      <FoodDetailModal
-        visible={modalVisible}
-        food={selectedFood}
-        onClose={() => setModalVisible(false)}
-      />
-    </View>
+        {showSort && (
+          <View style={styles.sortDropdown}>
+            {SORT_OPTIONS.map(opt => (
+              <TouchableOpacity key={opt.value} style={styles.sortOption} onPress={() => { setSort(opt.value); setShowSort(false); }}>
+                <Icon name={opt.icon} size={16} color="#fbc02d" style={{ marginRight: 8 }} />
+                <Text style={{ color: '#fff' }}>{opt.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+        
+        <FoodDetailModal
+          visible={modalVisible}
+          food={selectedFood}
+          onClose={() => setModalVisible(false)}
+        />
+      </View>
+    </MainLayout>
   );
 };
 

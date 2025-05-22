@@ -159,6 +159,16 @@ const AdminHomeScreen = ({ navigation }: any) => {
         </View>
       </View>
       
+      {/* Thêm banner giải thích */}
+      <View style={styles.infoBanner}>
+        <View style={styles.infoIconContainer}>
+          <Icon name="info-circle" size={18} style={styles.infoIcon} />
+        </View>
+        <Text style={styles.infoText}>
+          Dashboard hiển thị doanh thu từ các đơn hàng đã giao hoặc đã thanh toán. Xem báo cáo đầy đủ tại mục "Thống kê & Báo cáo".
+        </Text>
+      </View>
+      
       <ScrollView 
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -378,6 +388,51 @@ const styles = StyleSheet.create({
   headerButton: {
     padding: 8,
     marginLeft: 15,
+  },
+  infoBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2a2a32',
+    borderRadius: 8,
+    padding: 12,
+    marginHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#2196F3',
+  },
+  infoIconContainer: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#2196F3',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  infoText: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  infoIcon: {
+    color: '#fff',
+  },
+  infoTitle: {
+    fontWeight: 'bold',
+    marginBottom: 3,
+  },
+  infoContent: {
+    opacity: 0.8,
+  },
+  infoLink: {
+    color: '#2196F3',
+    marginTop: 4,
+  },
+  infoLinkText: {
+    color: '#2196F3',
+    fontWeight: 'bold',
   },
   content: {
     flex: 1,

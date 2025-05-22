@@ -91,23 +91,31 @@ const AdminFoodDetailModal = ({
           </ScrollView>
           
           <View style={styles.modalFooter}>
+            {/* Nút Ẩn/Hiện món ăn được cải thiện */}
             <TouchableOpacity 
-              style={[styles.footerButton, styles.toggleButton, 
-                { backgroundColor: food.status === 1 ? '#f44336' : '#4caf50' }
+              style={[
+                styles.footerButton, 
+                styles.toggleButton, 
+                { 
+                  backgroundColor: food.status === 1 ? '#f44336' : '#4caf50',
+                  borderWidth: 1,
+                  borderColor: food.status === 1 ? '#d32f2f' : '#388e3c',
+                }
               ]} 
               onPress={onToggleStatus}
             >
               <Icon 
                 name={food.status === 1 ? 'eye-slash' : 'eye'} 
-                size={18} 
+                size={20} 
                 color="#fff" 
                 style={styles.buttonIcon} 
               />
-              <Text style={styles.buttonText}>
+              <Text style={[styles.buttonText, { fontSize: 16 }]}>
                 {food.status === 1 ? 'Ẩn món' : 'Hiện món'}
               </Text>
             </TouchableOpacity>
             
+            {/* Phần còn lại giữ nguyên */}
             <View style={styles.buttonGroup}>
               <TouchableOpacity 
                 style={[styles.footerButton, styles.deleteButton]} 
@@ -250,6 +258,14 @@ const styles = StyleSheet.create({
   },
   toggleButton: {
     backgroundColor: '#f44336',
+    borderWidth: 1,
+    borderColor: '#d32f2f',
+    elevation: 3, // Thêm bóng cho Android
+    shadowColor: '#000', // Thêm bóng cho iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    marginBottom: 10, // Tăng khoảng cách với các nút bên dưới
   },
   deleteButton: {
     backgroundColor: '#f44336',
@@ -259,11 +275,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196f3',
   },
   buttonIcon: {
-    marginRight: 8,
+    marginRight: 10,
+    fontSize: 20,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
